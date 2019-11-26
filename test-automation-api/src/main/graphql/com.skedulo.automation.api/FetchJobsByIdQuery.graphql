@@ -1,0 +1,12 @@
+query FetchJobsByIdQuery($jobFilter: EQLQueryFilterJobs!) {
+    jobs(filter: $jobFilter) {
+        edges {
+            node {
+                UID
+                Name
+                Description
+                JobStatus
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Skedulo GraphQL Schema",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "https://api.skedulo.com/graphql/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+            "Authorization": "Bearer ${env:AUTH_TOKEN_PROD_ENV}"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

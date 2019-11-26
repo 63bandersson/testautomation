@@ -1,0 +1,17 @@
+query fetchResources {
+    resources {
+        edges {
+            node {
+                UID
+                Name
+                HomeAddress
+                GeoLatitude
+                GeoLongitude
+                PrimaryRegion {
+                    UID
+                    Name
+                }
+            }
+        }
+    }
+}

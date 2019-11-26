@@ -1,0 +1,46 @@
+
+buildscript {
+//    project.apply {
+//        from(rootProject.file("gradle/dependencies.gradle"))
+//    }
+    ext.kotlin_version = '1.3.60'
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'https://nexus.test.skl.io/repository/public'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.apollographql.apollo:apollo-gradle-plugin:1.1.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+
+    }
+}
+apply plugin: 'idea'
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: 'base'
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+subprojects {
+//    apply {
+//        from(rootProject.file("gradle/dependencies.gradle"))
+//    }
+    apply plugin: 'idea'
+}
+
+compileKotlin {
+    println projectDir
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    println projectDir
+    kotlinOptions.jvmTarget = "1.8"
+}

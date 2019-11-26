@@ -1,0 +1,15 @@
+query JobsQuery {
+    jobs
+    {
+        edges
+        {
+            node
+            {
+                UID
+                Name
+                Description
+                JobStatus
+            }
+        }
+    }
+}
