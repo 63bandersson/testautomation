@@ -1,6 +1,6 @@
 apollo {
-    //generateKotlinModels = true
-    //generateModelBuilder = true
+    generateKotlinModels = true
+    generateModelBuilder = true
    // schemaFilePath = "src/main/graphql/schema.json"
     //outputPackageName = "com.my-example.graphql.api"
     useSemanticNaming = true

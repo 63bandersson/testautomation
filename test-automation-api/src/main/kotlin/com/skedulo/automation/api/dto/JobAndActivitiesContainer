@@ -1,0 +1,6 @@
+package com.skedulo.automation.api.dto
+
+data class JobAndActivitiesContainer(
+    val activities: List<AllocationActivity>,
+    val jobs: List<Job>
+)
