@@ -1,0 +1,40 @@
+query FetchJobOffersQuery($jobOffersfilter: EQLQueryFilterJobOffers!) {
+    jobOffers(filter: $jobOffersfilter)
+    {
+        edges
+        {
+            node
+            {
+                UID
+                Status
+                Job
+                {
+                    UID
+                    GeoLatitude
+                    GeoLongitude
+                }
+                ResourceJobOffers
+                {
+                    UID
+                    Status
+                    Response
+                    TimeNotified
+                    TimeResponded
+                    CreatedDate
+                    Resource
+                    {
+                        UID
+                        Name
+                        Category
+                        GeoLatitude
+                        GeoLongitude
+                        NotificationType
+                    }
+                }
+                ResourceRequirement {
+                    UID
+                }
+            }
+        }
+    }
+}

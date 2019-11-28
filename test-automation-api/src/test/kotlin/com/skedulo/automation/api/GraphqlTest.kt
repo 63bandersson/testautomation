@@ -16,25 +16,18 @@ import android.util.Log
 import com.skedulo.automation.api.utils.TestParent
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import com.skedulo.automation.api.ApolloBaseClient
 
 @RunWith(RobolectricTestRunner::class)
 class GraphqlTest: TestParent() {
 
 
     @Test
-    fun testJobsQuery() {
-        val TAG = "graphqlTest"
-//        val apolloClient = ApolloClient.builder()
-//            .serverUrl("https://api.skedulo.com/graphql/graphql")
-//            .okHttpClient(
-//                OkHttpClient.Builder()
-//                    .connectTimeout(30, TimeUnit.SECONDS)
-//                    .writeTimeout(30, TimeUnit.SECONDS)
-//                    .readTimeout(30, TimeUnit.SECONDS)
-//                    .build()
-//            )
-        val apolloClient = provideApolloClient( )
+    fun testJobsQueryEnque() {
+        val TAG = "graphqlTest:testJobsQuery"
 
+        //val apolloClient = provideApolloClient()
+        val apolloClient = ApolloBaseClient.getApolloClient()
         var jobQuery = JobsQuery()
         apolloClient!!.query(jobQuery)
             .enqueue(object: ApolloCall.Callback<JobsQuery.Data>() {
@@ -43,6 +36,33 @@ class GraphqlTest: TestParent() {
                     if (!response.hasErrors()) {
                         // Here response().data() contains the data you requested
                         Log.d(TAG, "Response: ${response.data()}")
+                        println("Response data = ${response.data()}")
+                    } else {
+                        Log.d(TAG, "Request Failure ${response.errors()}")
+                    }
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    e.printStackTrace()
+                }
+            })
+
+    }
+    @Test
+    fun testJobsQueryRx2Appollo() {
+        val TAG = "graphqlTest:testJobsQuery"
+
+        //val apolloClient = provideApolloClient()
+        val apolloClient = ApolloBaseClient.getApolloClient()
+        var jobQuery = JobsQuery()
+        apolloClient!!.query(jobQuery)
+            .enqueue(object: ApolloCall.Callback<JobsQuery.Data>() {
+
+                override fun onResponse(response: Response<JobsQuery.Data>) {
+                    if (!response.hasErrors()) {
+                        // Here response().data() contains the data you requested
+                        Log.d(TAG, "Response: ${response.data()}")
+                        println("Response data = ${response.data()}")
                     } else {
                         Log.d(TAG, "Request Failure ${response.errors()}")
                     }
@@ -57,7 +77,31 @@ class GraphqlTest: TestParent() {
 
 
     @Test
-    internal fun testFetchResources() {
+    fun testFetchResources() {
+
+        val TAG = "graphqlTest:testFetchResourcess"
+        //val apolloClient = provideApolloClient()
+        val apolloClient = ApolloBaseClient.getApolloClient()
+
+        var fetchResourcesQuery = FetchResourcesQuery()
+        apolloClient!!.query(fetchResourcesQuery)
+            .enqueue(object : ApolloCall.Callback<FetchResourcesQuery.Data>() {
+
+                override fun onResponse(response: Response<FetchResourcesQuery.Data>) {
+                    if (!response.hasErrors()) {
+                        // Here response().data() contains the data you requested
+                        Log.d(TAG, "Response: ${response.data()}")
+                        //println("Response data = ${response.data()}")
+                    } else {
+                        Log.d(TAG, "Request Failure ${response.errors()}")
+                    }
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    e.printStackTrace()
+                }
+            })
+    }
         /*    var client = ApolloBaseClient.getApolloClient()
             client=setupApollo()
             client.query(fetchResourcesQuery    //From the auto generated class
@@ -84,7 +128,6 @@ class GraphqlTest: TestParent() {
     //                    })
                     }
                 })*/
-    }
     fun provideApolloClient( ): ApolloClient {
         return ApolloClient.builder()
             .serverUrl("https://api.skedulo.com/graphql/graphql")
