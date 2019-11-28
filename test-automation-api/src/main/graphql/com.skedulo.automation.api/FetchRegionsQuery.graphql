@@ -1,0 +1,10 @@
+query fetchRegions {
+    regions {
+        edges {
+            node {
+                UID
+                Name
+            }
+        }
+    }
+}
