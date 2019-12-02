@@ -4,19 +4,39 @@ apollo {
    // schemaFilePath = "src/main/graphql/schema.json"
     //outputPackageName = "com.my-example.graphql.api"
     useSemanticNaming = true
-    customTypeMapping['EQLQueryFilterJobs'] = "java.lang.String"
-    customTypeMapping['EQLQueryFilterJobAllocations'] = "java.lang.String"
-    customTypeMapping['EQLQueryFilterActivities'] = "java.lang.String"
-    customTypeMapping['EQLQueryFilterResources'] = "java.lang.String"
-    customTypeMapping['Instant'] = "java.lang.String"
-    customTypeMapping['BigDecimal'] = "java.lang.Double"
-    customTypeMapping['Duration'] = "java.lang.Integer"
-    customTypeMapping['ID'] = "java.lang.String"
+    customTypeMapping['EQLQueryFilterJobs'] = "kotlin.String"
+    customTypeMapping['EQLQueryFilterJobAllocations'] = "kotlin.String"
+    customTypeMapping['EQLQueryFilterActivities'] = "kotlin.String"
+    customTypeMapping['EQLQueryFilterResources'] = "kotlin.String"
+    customTypeMapping['Instant'] = "kotlin.String"
+    customTypeMapping['BigDecimal'] = "kotlin.Double"
+    customTypeMapping['Duration'] = "kotlin.Int"
+    customTypeMapping['ID'] = "kotlin.String"
     customTypeMapping['Status'] = "com.skedulo.core.api.dto.JobStatus"
-    customTypeMapping['JobStatus'] = "java.lang.String"
-    customTypeMapping['JobAllocationStatus'] = "java.lang.String"
+    customTypeMapping['JobStatus'] = "kotlin.String"
+    customTypeMapping['JobAllocationStatus'] = "kotlin.String"
     //generateKotlinModels = true
 //    sourceSet {
 //        schemaFile = "src/main/com/apollographql/apollo/sample/schema.json"
 //    }
 }
+//apollo {
+//    // schemaFilePath = "src/main/graphql/schema.json"
+//    //outputPackageName = "com.my-example.graphql.api"
+//    useSemanticNaming = true
+//    customTypeMapping['EQLQueryFilterJobs'] = "kotlin.String"
+//    customTypeMapping['EQLQueryFilterJobAllocations'] = "kotlin.String"
+//    customTypeMapping['EQLQueryFilterActivities'] = "kotlin.String"
+//    customTypeMapping['EQLQueryFilterResources'] = "kotlin.String"
+//    customTypeMapping['Instant'] = "kotlin.String"
+//    customTypeMapping['BigDecimal'] = "kotlin.Double"
+//    customTypeMapping['Duration'] = "kotlin.Integer"
+//    customTypeMapping['ID'] = "kotlin.String"
+//    customTypeMapping['Status'] = "com.skedulo.core.api.dto.JobStatus"
+//    customTypeMapping['JobStatus'] = "kotlin.String"
+//    customTypeMapping['JobAllocationStatus'] = "kotlin.String"
+//    //generateKotlinModels = true
+////    sourceSet {
+////        schemaFile = "src/main/com/apollographql/apollo/sample/schema.json"
+////    }
+//}

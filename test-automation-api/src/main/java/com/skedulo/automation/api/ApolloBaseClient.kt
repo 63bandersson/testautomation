@@ -9,6 +9,9 @@ import java.util.concurrent.TimeUnit
 import org.threeten.bp.Instant
 import io.reactivex.*
 import android.util.Log
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.exception.ApolloException
+import com.skedulo.automation.api.types.UID
 
 
 class ApolloBaseClient {
@@ -42,63 +45,69 @@ class ApolloBaseClient {
         fun getApolloClient(): ApolloClient {
             return apolloClient
         }
-//        fun fetchRegions(): Single<RegionsContainer>{
-//        val TAG = "graphqlTest:testFetchResources"
-//        val fetchRegions = FetchRegionsQuery()
-//        val call = apolloClient?.query(query)!!
-//        return RX2Apollo.from(call).singleOrError().map {
-//            Log.d("GOT DATA", it.toString())
-//            it.data()?.let { data ->
-//        }
 
-        //        fun fetchJobsAndActivities(start: Instant, end: Instant): Single<JobAndActivitiesContainer> {
-//            //Log.d("START: ", start.toString())
-//            //val resourceId = metaData.getUserMetadata()?.resourceId
-//            val resourceId = ""
-//            val query = AgendaQuery.builder()
-//                .resourcesFilter("UID == '${resourceId}'")
-//                .activityFilter("ResourceId == '${resourceId}' AND Start >= $start AND End <= $end ")
-//                .allocationFilter("Start >= $start AND End <= $end" +
-//                        "AND Status != 'Deleted' " +
-//                        "AND Status != 'Declined' " +
-//                        "AND Status != 'Pending Dispatch'")
-//                .build()
-//
-//            val call = apolloClient?.query(query)!!
-//
-//            return Rx2Apollo.from(call).singleOrError().map {
-//                //Log.d("GOT DATA", it.toString())
-//                it.data()?.let { data ->
-//                    val jobs = data.resources().edges().first().node().ResourceAllocations().map { allocation ->
-//                        Job.fromGraphql(allocation.Job())
-//                    }.toList()
-//                    val activities = data.activities().edges().map { activities ->
-//                        AllocationActivity.fromGraphql(activities.node())
-//                    }.toList()
-//                    JobAndActivitiesContainer(activities, jobs.filter { job -> job.status !in unAcceptedJobStatus })
-//                } ?: throw ApiException(it.errors().firstOrNull()?.message()
-//                    ?: "An Error occurred", it.errors().firstOrNull().hashCode())
-//            }.doOnError {
-//                Log.d("Error fetching data: ", it.message ?: "Parse Error")
-//                throw it
-//            }
-//        }
-//    }
-//        fun getJobs() : Single<Job> {
-//            val query = JobsQuery.Builder()
-//                .build()
-//            val call = apolloClient?.query(query)!!
-//
-//            return Rx2Apollo.from(call).singleOrError() {
-//                Log.d("GOT DATA", it.toString())
-//                it.data()?.let { data ->
-//                    val jobs = data.jobs().edges().first().node().ResourceAllocations()
-////                        .map { allocation ->
-////                            Job.fromGraphql(allocation.Job())
-////                        }.toList()
-//                }
-//            }
-//        }
+        fun fetchRegions(): Single<Response<FetchRegionsQuery.Data>> {
+            val fetchRegions = FetchRegionsQuery()
+            val call = apolloClient?.query(fetchRegions)!!
+            return Rx2Apollo.from(call).singleOrError()
+        }
 
+        fun fetchRegion(name: String): String {
+            var uid: String = ""
+            val apolloClient = getApolloClient()
+            val fetchRegions = FetchRegionsQuery()
+            apolloClient.query(fetchRegions)
+                .enqueue(object : ApolloCall.Callback<FetchRegionsQuery.Data>() {
+
+                    override fun onResponse(response: Response<FetchRegionsQuery.Data>) =
+                        if (!response.hasErrors()) {
+                            println("Response data = ${response.data()}")
+                            val iter = response.data()!!.regions.edges.listIterator()
+                            while (iter.hasNext()) {
+                                val theNode = iter.next().node
+                                if (theNode.name.equals(name)) {
+                                    if (theNode.uID != null) {
+                                        uid = theNode.uID.toString()
+                                    }
+                                }
+                            }
+                        } else {
+                            println("Response error = ${response.errors()}")
+                        }
+
+                    override fun onFailure(e: ApolloException) {
+                        e.printStackTrace()
+                    }
+                })
+            return uid
+
+        }
+
+        fun fetchJobs() {
+            val apolloClient = getApolloClient()
+            val jobQuery = JobsQuery()
+
+            apolloClient.query(jobQuery)
+                .enqueue(object : ApolloCall.Callback<JobsQuery.Data>() {
+
+                    override fun onResponse(response: Response<JobsQuery.Data>) =
+                        if (!response.hasErrors()) {
+                            println("Response data = ${response.data()}")
+
+                        } else {
+                            println("Response error = ${response.errors()}")
+                        }
+
+                    override fun onFailure(e: ApolloException) {
+                        e.printStackTrace()
+                    }
+                })
+
+        }
+//        fun fetchJobsById(idString: String) {
+//            val apolloClient = getApolloClient()
+//            val jobsByIdQuery = FetchJobsByIdQuery.builder()
+//                .
+//        }
     }
 }

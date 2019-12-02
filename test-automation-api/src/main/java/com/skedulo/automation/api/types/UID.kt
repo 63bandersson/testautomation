@@ -1,4 +1,4 @@
-package com.skedulo.core.api.types
+package com.skedulo.automation.api.types
 
 import java.io.Serializable
 import java.util.*

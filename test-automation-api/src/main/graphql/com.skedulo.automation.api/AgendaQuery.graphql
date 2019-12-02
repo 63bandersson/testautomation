@@ -1,0 +1,96 @@
+query AgendaQuery($resourcesFilter: EQLQueryFilterResources! $activityFilter: EQLQueryFilterActivities! $allocationFilter: EQLQueryFilterJobAllocations!) {
+    resources(filter: $resourcesFilter) {
+        edges {
+            node {
+                UID
+                Name
+                ResourceAllocations: JobAllocations(filter: $allocationFilter)
+                {
+                    Name
+                    ResourceId
+                    Job
+                    {
+                        Account{Name UID PreJobSafetyRequired}
+                        AccountId
+                        Address
+                        ApprovingAccount
+                        CanBeDeclined
+                        Contact {AccountId Email FirstName LastName MobilePhone Phone Title UID}
+                        ContactId
+                        NotifyBy
+                        CreatedById
+                        Locked
+                        LEO
+                        AbortReason
+                        RecurringScheduleId
+                        WorkLocationStart
+                        LastModifiedDate
+                        JobInstructions
+                        StatusChangeDisabled
+                        CreatedDate
+                        LocationId
+                        SpinOffJob
+                        LEOComment
+                        JobRequiresEstimatedProductQuantities
+                        IsGroupEvent
+                        IMEINumbers
+                        CustomerBillingReferenceNumber
+                        MeetAtLocation
+                        ParentId
+                        ActualEnd
+                        JobTimeConstraints{EndBefore JobId Required StartAfter StartBefore UID}
+                        ClientJobNumber
+                        RentalType
+                        OfficeId
+                        RecurringSchedule{AckAllJobs CreatedDate Description Name Summary UID}
+                        WorkOrderType
+                        MaxAttendees
+                        CompletionNotes
+                        Office{Name UID}
+                        EstimatedEnd
+                        FollowupReason
+                        ActualStart
+                        AWPOperationsRegion
+                        Urgency
+                        EstimatedStart
+                        MinAttendees
+                        JobAllocationCount
+                        NewClientJob
+                        AutoSchedule
+                        NewJobAddress
+                        BillableHours
+                        NotifyPeriod
+                        Description
+                        Duration
+                        GeoLatitude
+                        GeoLongitude
+                        JobAllocations(filter: $allocationFilter){TimeCheckedIn TimeCompleted TimeInProgress JobId Name ResourceId TimeResponded SFCDriver SFCSigner SFCEquipCarrier TimeStartTravel Status UID }
+                        Name
+                        NotesComments
+                        RegionId
+                        Start
+                        End
+                        JobStatus
+                        Timezone
+                        Type
+                        UID
+                    }
+                }
+            }
+        }
+    }
+    activities(filter: $activityFilter){
+        edges {
+            node {
+                Address
+                End
+                Name
+                Notes
+                ResourceId
+                Start
+                Type
+                UID
+            }
+        }
+    }
+}
