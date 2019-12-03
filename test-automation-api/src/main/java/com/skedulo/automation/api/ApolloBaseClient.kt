@@ -12,6 +12,7 @@ import android.util.Log
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.skedulo.automation.api.types.UID
+import okhttp3.Interceptor
 
 
 class ApolloBaseClient {
@@ -25,89 +26,51 @@ class ApolloBaseClient {
 
         init {
             val logging = HttpLoggingInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+            logging.level = HttpLoggingInterceptor.Level.BODY
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor { chain ->
-                    chain.proceed(
-                        chain.request().newBuilder().addHeader(
-                            "Authorization",
-                            "Bearer $AUTH_TOKEN"
-                        ).build()
-                    )
-                }
-                .build()
-            apolloClient = ApolloClient.builder()
-                .serverUrl(BASE_URL_GRAPHQL)
-                .okHttpClient(okHttpClient)
-                .build()
+                .addInterceptor { addHeadersInterceptor(it) }
+                .addInterceptor(logging).build()
+            apolloClient =
+                ApolloClient.builder().serverUrl(BASE_URL_GRAPHQL).okHttpClient(okHttpClient)
+                    .build()
+        }
+
+        fun addHeadersInterceptor(chain: Interceptor.Chain): okhttp3.Response {
+            val requestBuilder = chain.request().newBuilder()
+            requestBuilder.addHeader("authorization", "Bearer $AUTH_TOKEN")
+            return chain.proceed(requestBuilder.build())
         }
 
         fun getApolloClient(): ApolloClient {
             return apolloClient
         }
 
-        fun fetchRegions(): Single<Response<FetchRegionsQuery.Data>> {
+        fun fetchRegions(): Single<FetchRegionsQuery.Region> {
+            //val apolloClient = getApolloClient()
             val fetchRegions = FetchRegionsQuery()
-            val call = apolloClient?.query(fetchRegions)!!
-            return Rx2Apollo.from(call).singleOrError()
+            val call = apolloClient.query(fetchRegions)
+            return Rx2Apollo.from(call).singleOrError().map {
+                it.data()?.run { regions }
+            }
         }
 
-        fun fetchRegion(name: String): String {
-            var uid: String = ""
-            val apolloClient = getApolloClient()
-            val fetchRegions = FetchRegionsQuery()
-            apolloClient.query(fetchRegions)
-                .enqueue(object : ApolloCall.Callback<FetchRegionsQuery.Data>() {
 
-                    override fun onResponse(response: Response<FetchRegionsQuery.Data>) =
-                        if (!response.hasErrors()) {
-                            println("Response data = ${response.data()}")
-                            val iter = response.data()!!.regions.edges.listIterator()
-                            while (iter.hasNext()) {
-                                val theNode = iter.next().node
-                                if (theNode.name.equals(name)) {
-                                    if (theNode.uID != null) {
-                                        uid = theNode.uID.toString()
-                                    }
-                                }
-                            }
-                        } else {
-                            println("Response error = ${response.errors()}")
-                        }
-
-                    override fun onFailure(e: ApolloException) {
-                        e.printStackTrace()
-                    }
-                })
-            return uid
-
+        fun fetchJobs(filterQuery: String): Single<FetchJobsQuery.Job> {
+            //val apolloClient = getApolloClient()
+            val jobsQuery = FetchJobsQuery(filterQuery)
+            val call = apolloClient.query(jobsQuery)
+            return Rx2Apollo.from(call).singleOrError().map {
+                it.data()?.run { jobs }
+            }
         }
 
-        fun fetchJobs() {
-            val apolloClient = getApolloClient()
-            val jobQuery = JobsQuery()
-
-            apolloClient.query(jobQuery)
-                .enqueue(object : ApolloCall.Callback<JobsQuery.Data>() {
-
-                    override fun onResponse(response: Response<JobsQuery.Data>) =
-                        if (!response.hasErrors()) {
-                            println("Response data = ${response.data()}")
-
-                        } else {
-                            println("Response error = ${response.errors()}")
-                        }
-
-                    override fun onFailure(e: ApolloException) {
-                        e.printStackTrace()
-                    }
-                })
-
+        fun fetchJobOffers(filterQuery: String): Single<FetchJobOffersQuery.JobOffer> {
+            //val apolloClient = getApolloClient()
+            val jobOffersQuery = FetchJobOffersQuery(filterQuery)
+            val call = apolloClient.query(jobOffersQuery)
+            return Rx2Apollo.from(call).singleOrError().map {
+                it.data()?.run { jobOffers }
+            }
         }
-//        fun fetchJobsById(idString: String) {
-//            val apolloClient = getApolloClient()
-//            val jobsByIdQuery = FetchJobsByIdQuery.builder()
-//                .
-//        }
     }
 }

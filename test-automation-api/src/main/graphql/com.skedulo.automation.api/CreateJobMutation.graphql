@@ -1,0 +1,5 @@
+mutation createJob($createInput: NewJobs!) {
+    schema {
+        insertJobs(input: $createInput)
+    }
+}

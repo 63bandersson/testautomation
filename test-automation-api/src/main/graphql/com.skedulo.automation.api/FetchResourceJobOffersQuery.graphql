@@ -1,0 +1,27 @@
+query ResourceJobOffersQuery($resourceJobOfferFilter: EQLQueryFilterResourceJobOffers!){
+    resourceJobOffers(filter:$resourceJobOfferFilter)
+    {
+        edges
+        {
+            node
+            {
+                UID
+                Resource
+                {
+                    NotificationType
+                }
+                JobOfferId
+                JobOffer
+                {
+                    ResourceJobOffers
+                    {
+                        UID
+                        Status
+
+                    }
+                }
+
+            }
+        }
+    }
+}

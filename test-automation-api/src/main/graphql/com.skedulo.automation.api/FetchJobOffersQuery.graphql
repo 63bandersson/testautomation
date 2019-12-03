@@ -10,6 +10,7 @@ query FetchJobOffersQuery($jobOffersfilter: EQLQueryFilterJobOffers!) {
                 Job
                 {
                     UID
+                    Name
                     GeoLatitude
                     GeoLongitude
                 }

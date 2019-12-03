@@ -6,11 +6,9 @@ import com.skedulo.automation.api.annotations.Authorization
 import com.skedulo.automation.api.annotations.AuthorizationType
 import com.skedulo.automation.api.annotations.BaseUrl
 import com.skedulo.automation.api.retrofit.EnumConverterFactory
-import com.skedulo.automation.api.retrofit.EnumRetrofitConverterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
